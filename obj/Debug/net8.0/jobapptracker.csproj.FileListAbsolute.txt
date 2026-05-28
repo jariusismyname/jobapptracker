@@ -35,3 +35,4 @@ C:\Users\Admin\Documents\Website Projects for Employment 2026\jobapptracker\obj\
 C:\Users\Admin\Documents\Website Projects for Employment 2026\jobapptracker\obj\Debug\net8.0\jobapptracker.pdb
 C:\Users\Admin\Documents\Website Projects for Employment 2026\jobapptracker\obj\Debug\net8.0\jobapptracker.genruntimeconfig.cache
 C:\Users\Admin\Documents\Website Projects for Employment 2026\jobapptracker\obj\Debug\net8.0\ref\jobapptracker.dll
+C:\Users\Admin\Documents\Website Projects for Employment 2026\jobapptracker\obj\Debug\net8.0\jobapptracker.sourcelink.json
