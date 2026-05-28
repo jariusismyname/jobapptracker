@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "zXON2lIFMcO9VNndvUk1Ds1G8Rvtte5Ald8uYNDxqpI=",
+  "Source": "jobapptracker",
+  "BasePath": "_content/jobapptracker",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "jobapptracker\\wwwroot",
+      "Source": "jobapptracker",
+      "ContentRoot": "C:\\Users\\Admin\\Documents\\Website Projects for Employment 2026\\jobapptracker\\wwwroot\\",
+      "BasePath": "_content/jobapptracker",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Admin\\Documents\\Website Projects for Employment 2026\\jobapptracker\\wwwroot\\index.html",
+      "SourceId": "jobapptracker",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Documents\\Website Projects for Employment 2026\\jobapptracker\\wwwroot\\",
+      "BasePath": "_content/jobapptracker",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}

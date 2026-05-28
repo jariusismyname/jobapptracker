@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; }
+        .form-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input, select { padding: 8px; flex: 1; }
+        button { padding: 8px 15px; background: #28a745; color: white; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; }
+        .delete-btn { background: #dc3545; padding: 5px 10px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <h2>Job Hunt Tracker</h2>
+    
+    <div class="form-group">
+        <input type="text" id="companyInput" placeholder="Company Name">
+        <input type="text" id="roleInput" placeholder="Job Role">
+        <select id="statusInput">
+            <option value="Applied">Applied</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+        <button onclick="addJob()">Add</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="jobTableBody">
+            <!-- Data will load here -->
+        </tbody>
+    </table>
+
+    <script>
+        const apiUrl = '/api/jobs';
+
+        async function fetchJobs() {
+            const response = await fetch(apiUrl);
+            const jobs = await response.json();
+            const tbody = document.getElementById('jobTableBody');
+            tbody.innerHTML = '';
+            
+            jobs.forEach(job => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${job.company}</td>
+                    <td>${job.role}</td>
+                    <td><strong>${job.status}</strong></td>
+                    <td><button class="delete-btn" onclick="deleteJob(${job.id})">Remove</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function addJob() {
+            const company = document.getElementById('companyInput').value;
+            const role = document.getElementById('roleInput').value;
+            const status = document.getElementById('statusInput').value;
+            
+            if (!company || !role) {
+                alert("Please fill out the Company and Role.");
+                return;
+            }
+
+            const newJob = { company, role, status };
+            
+            await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newJob)
+            });
+
+            document.getElementById('companyInput').value = '';
+            document.getElementById('roleInput').value = '';
+            fetchJobs();
+        }
+
+        async function deleteJob(id) {
+            await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+            fetchJobs();
+        }
+
+        fetchJobs();
+    </script>
+</body>
+</html>
