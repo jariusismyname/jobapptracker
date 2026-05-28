@@ -2,17 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Job Application Tracker</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; }
-        .form-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        input, select { padding: 8px; flex: 1; }
-        button { padding: 8px 15px; background: #28a745; color: white; border: none; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f8f9fa; }
-        .delete-btn { background: #dc3545; padding: 5px 10px; font-size: 12px; }
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            padding: 0 16px; /* Prevents text from hugging the screen edge on mobile */
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        
+        h2 { text-align: center; margin-bottom: 20px; color: #111827; }
+        
+        /* Form container */
+        .form-group { 
+            display: flex; 
+            flex-direction: column; /* Stack inputs vertically on mobile */
+            gap: 12px; 
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px; 
+        }
+        
+        /* 16px font-size prevents iOS Safari from forcing an annoying auto-zoom on click */
+        input, select, button { 
+            padding: 12px; 
+            font-size: 16px; 
+            border: 1px solid #d1d5db; 
+            border-radius: 6px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
+        input:focus, select:focus {
+            outline: 2px solid #2563eb;
+            border-color: transparent;
+        }
+        
+        button { 
+            background: #2563eb; 
+            color: white; 
+            border: none; 
+            font-weight: 600;
+            cursor: pointer; 
+            transition: background 0.2s;
+        }
+        button:hover { background: #1d4ed8; }
+        
+        .delete-btn { 
+            background: #ef4444; 
+            padding: 8px 12px; 
+            font-size: 14px;
+        }
+        .delete-btn:hover { background: #dc2626; }
+
+        /* --- DESKTOP STYLING (Screens wider than 600px) --- */
+        @media (min-width: 600px) {
+            .form-group { 
+                flex-direction: row; /* Horizontal row on desktop */
+                align-items: center; 
+            }
+            input, select { flex: 2; }
+            button { flex: 1; width: auto; }
+            
+            table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+            th, td { padding: 14px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+            th { background-color: #f3f4f6; font-weight: 600; color: #4b5563; }
+            tr:last-child td { border-bottom: none; }
+        }
+
+        /* --- MOBILE TABLE-TO-CARD MORPH (Screens under 600px) --- */
+        @media (max-width: 599px) {
+            table, thead, tbody, th, td, tr { 
+                display: block; /* Turns standard table rows into block layout */
+            }
+            thead { display: none; /* Hide table headers on mobile */ }
+            
+            tr { 
+                background: white; 
+                border-radius: 8px; 
+                padding: 16px; 
+                margin-bottom: 12px; 
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+            }
+            
+            td { 
+                padding: 8px 0; 
+                border: none; 
+                display: flex; 
+                justify-content: space-between; /* Pushes label to left, value to right */
+                align-items: center;
+                border-bottom: 1px dashed #f3f4f6;
+            }
+            
+            td:last-of-type { border-bottom: none; }
+            
+            /* Dynamically injects the column headers via the HTML 'data-label' attribute */
+            td::before { 
+                content: attr(data-label); 
+                font-weight: 600; 
+                color: #6b7280; 
+            }
+            
+            .delete-btn { width: auto; margin-top: 4px; }
+        }
     </style>
 </head>
 <body>
@@ -28,7 +125,7 @@
             <option value="Offer">Offer</option>
             <option value="Rejected">Rejected</option>
         </select>
-        <button onclick="addJob()">Add</button>
+        <button onclick="addJob()">Add Application</button>
     </div>
 
     <table>
@@ -41,12 +138,11 @@
             </tr>
         </thead>
         <tbody id="jobTableBody">
-            <!-- Data will load here -->
-        </tbody>
+            </tbody>
     </table>
 
-    <script>        const apiUrl = '/api/jobs';
-
+    <script>
+        const apiUrl = '/api/jobs';
 
         async function fetchJobs() {
             const response = await fetch(apiUrl);
@@ -56,11 +152,12 @@
             
             jobs.forEach(job => {
                 const tr = document.createElement('tr');
+                // Added 'data-label' attributes so CSS knows what label to display on mobile
                 tr.innerHTML = `
-                    <td>${job.company}</td>
-                    <td>${job.role}</td>
-                    <td><strong>${job.status}</strong></td>
-                    <td><button class="delete-btn" onclick="deleteJob(${job.id})">Remove</button></td>
+                    <td data-label="Company">${job.company}</td>
+                    <td data-label="Role">${job.role}</td>
+                    <td data-label="Status"><strong>${job.status}</strong></td>
+                    <td data-label="Action"><button class="delete-btn" onclick="deleteJob(${job.id})">Remove</button></td>
                 `;
                 tbody.appendChild(tr);
             });
